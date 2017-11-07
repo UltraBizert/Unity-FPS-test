@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour
 {
@@ -20,8 +21,8 @@ public class Player : MonoBehaviour
 
     private void GetInputs()
     {
-        moveInput.x = Input.GetAxis("Horizontal");
-        moveInput.y = Input.GetAxis("Vertical");
+        moveInput.x = CrossPlatformInputManager.GetAxis("Horizontal");
+        moveInput.y = CrossPlatformInputManager.GetAxis("Vertical");
     }
 
     private void Move()
