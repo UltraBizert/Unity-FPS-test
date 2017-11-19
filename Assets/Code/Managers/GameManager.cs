@@ -1,16 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Game.Weapons;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance
+    {
+        get { return instance == null ? FindObjectOfType<GameManager>() : instance; }
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private static GameManager instance;
+
+    public Camera GameCamera;
+    public Player Player;
+    public WeaponController PlayerWeaponController;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
 }

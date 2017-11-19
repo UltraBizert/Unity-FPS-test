@@ -9,17 +9,16 @@ public enum NPCStates
 }
 
 [RequireComponent(typeof(Rigidbody),typeof(NavMeshAgent),typeof(Animator))]
-public class NPC : MonoBehaviour, IInitable
+public class NPC : HitEntity, IInitable
 {
     protected const float distanceToPointTreshhold = 2f;
 
     public float RunSpeed;
     public float WalkSpeed;
-    public GameObject target;
 
     private Animator animator;
     private NavMeshAgent navMeshAgent;
-    private NPCStates currentState = NPCStates.Patrol;
+    private NPCStates currentState = NPCStates.Stay;
 
     private bool havePatrolPoint;
     private Transform currentPatrolPoint;
@@ -42,8 +41,20 @@ public class NPC : MonoBehaviour, IInitable
         
     }
 
+    protected override void OnDie()
+    {
+        base.OnDie();
+        DeInit();
+    }
+
     void FixedUpdate()
     {
+        if (IsDied)
+        {
+            animator.SetTrigger("Die");
+            return;
+        }
+
         switch (currentState)
         {
             case NPCStates.Stay:
