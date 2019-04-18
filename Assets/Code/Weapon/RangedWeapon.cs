@@ -14,23 +14,20 @@ namespace Game.Weapons
         public Transform Muzzle;
         public float Range;
         public float Damage;
-        [Tooltip("Shoot per second")]
-        public float AttackSpeed = 6;
-        [Tooltip("In seconds")]
-        public float RechargeDelay = 2;
+        [Tooltip("Shoot per second")] public float AttackSpeed = 6;
+        [Tooltip("In seconds")] public float RechargeDelay = 2;
 
-        public void Fire(RectTransform aim)
+        public void Fire()
         {
-            RaycastHit raycastHit;
-            Ray ray = GameManager.Instance.GameCamera.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0)); 
-            
-            if(Physics.Raycast(ray, out raycastHit, Range))
-            {
-                HitEntity hitEntity = raycastHit.collider.GetComponent<HitEntity>();
+            var ray = new Ray(transform.position, transform.forward);
 
-                if (hitEntity)
-                    hitEntity.OnHit(Damage);
-            }
+            Debug.DrawRay(ray.origin, ray.direction);
+
+            if (!Physics.Raycast(ray, out var rayCastHit, Range)) return;
+
+            var hitEntity = rayCastHit.collider.GetComponent<HitEntity>();
+
+            if (hitEntity) hitEntity.OnHit(Damage);
         }
     }
 }

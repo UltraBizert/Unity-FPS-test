@@ -7,16 +7,13 @@ namespace Game.Weapons
 {
     public class WeaponController : MonoBehaviour
     {
-        public RectTransform Aim;
-        public Text ammoCountText;
-
         private List<RangedWeapon> weapons = new List<RangedWeapon>();
         private AmmoContainer[] ammoContainers;
         private int currentWeaponIndex;
         private bool fire;
         private bool haveWeapon;
 
-        void Awake()
+        private void Awake()
         {
             weapons = new List<RangedWeapon>(GetComponentsInChildren<RangedWeapon>());
 
@@ -24,29 +21,31 @@ namespace Game.Weapons
                 haveWeapon = true;
         }
 
-        void Start()
+        private void Start()
         {
             currentWeaponIndex = 0;
-            SwapWeapon();
+//            SwapWeapon();
         }
 
-        void Update()
+        private void Update()
         {
-            fire = CrossPlatformInputManager.GetButtonDown("Fire1");
-            if (CrossPlatformInputManager.GetButtonDown("Fire2"))
+            Fire();
+//            SwapWeapon();
+        }
+
+        private void Fire()
+        {
+            if (CrossPlatformInputManager.GetButtonDown("Fire1") && haveWeapon)
             {
-                SwapWeapon();
+                weapons[currentWeaponIndex].Fire();
+                Debug.Log("fire");
             }
         }
 
-        void FixedUpdate()
+        private void SwapWeapon()
         {
-            if (fire && haveWeapon)
-                weapons[currentWeaponIndex].Fire(Aim);
-        }
+            if (!CrossPlatformInputManager.GetButtonDown("Fire2")) return;
 
-        public void SwapWeapon()
-        {
             currentWeaponIndex++;
 
             if (currentWeaponIndex > weapons.Count - 1)
@@ -71,11 +70,6 @@ namespace Game.Weapons
 
             if (weapon && !weapons.Contains(weapon))
                 weapons.Add(weapon);
-        }
-
-        public void AddAmmo(AmmoContainer ammoContainer)
-        {
-            
         }
     }
 }
